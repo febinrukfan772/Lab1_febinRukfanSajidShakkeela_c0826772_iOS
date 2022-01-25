@@ -52,7 +52,47 @@ class ViewController: UIViewController {
                 swipeRight.direction = UISwipeGestureRecognizer.Direction.right
                 view.addGestureRecognizer(swipeRight)
         
+        self.becomeFirstResponder() //for the shake gesture
+
+        
         // Do any additional setup after loading the view.
+    }
+    
+    // We are willing to become first responder to get shake motion
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+
+    // Enable detection of shake motion
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            if(curPlayer == 1){
+                undo_move()
+            }else{
+                undo_move()
+            }
+        }
+    }
+    
+    func undo_move(){
+            if(curPlayer == 1){
+                curPlayer = 2
+                empty_last()
+                return
+            }
+            if(curPlayer == 2){
+                curPlayer = 1
+                empty_last()
+                return
+            }
+        }
+    
+    func empty_last(){
+
+        buttons[tag].setBackgroundImage(UIImage.init(named: ""), for: .normal)
+
     }
 
     @objc func swiped(gesture: UISwipeGestureRecognizer) {
@@ -95,17 +135,23 @@ class ViewController: UIViewController {
     }
     
 
-    @IBAction func makeMove(_ sender: AnyObject) {
+    @IBAction func makeMove(_ sender: UIButton) {
+        
+        addButtonTag(tag_name: Int(sender.tag))
+        
         var completed = 0;
         if(sender.currentBackgroundImage == UIImage(named: "")){
-            sender.setBackgroundImage(UIImage(named: value), for: .normal)
             if(curPlayer == 1){
                 curPlayer = 2
                 value = "Nought"
+                sender.setBackgroundImage(UIImage(named: value), for: .normal)
+
             }
             else{
                 curPlayer = 1
                 value = "Cross"
+                sender.setBackgroundImage(UIImage(named: value), for: .normal)
+
             }
         }
         for btn in buttons {
@@ -122,22 +168,12 @@ class ViewController: UIViewController {
                 }
         
         
-//        if(sender.currentBackgroundImage == UIImage(named: "")){
-//            if(curPlayer == 1){
-//                sender.setBackgroundImage(UIImage.init(named: "Cross"), for: .normal);
-//                curPlayer = 2
-//                value = "Cross"
-//            }
-//            else{
-//                sender.setBackgroundImage(UIImage.init(named: "Nought"), for: .normal);
-//                curPlayer = 1
-//                value = "Nought"
-//
-//
-//            }
-//
-//        }
-        
+    }
+    
+    var tag = 0
+    
+    func addButtonTag(tag_name : Int){
+        tag = tag_name     
         
     }
 
