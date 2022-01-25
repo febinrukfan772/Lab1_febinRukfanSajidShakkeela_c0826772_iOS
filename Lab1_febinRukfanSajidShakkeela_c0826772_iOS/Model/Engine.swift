@@ -7,28 +7,22 @@
 
 import Foundation
 
-enum Symbol {
-    case cross
-    case circle
-    case clear
-}
-
-/// Current game status
-enum GameStatus {
-    case end
-    case even
-    case ongoing
-}
-
-enum Player: String {
-    case playerX = "PlayerX"
-    case playerO = "PlayerO"
-}
 
 
-//Engine is the model in MVC which controlls the logic
-
-class Engine {
+class Engine{
+    
+    var x_score = 0
+    var o_score = 0
+    var current_selections = ""
+    
+    
+    internal init(x_score: Int,o_score: Int, current_selections: String){
+        self.x_score = x_score
+        self.o_score = o_score
+        self.current_selections = current_selections
+        
+    }
     
     
 }
+

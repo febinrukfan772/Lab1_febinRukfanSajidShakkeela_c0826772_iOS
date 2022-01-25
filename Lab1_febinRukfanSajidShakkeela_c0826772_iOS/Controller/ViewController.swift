@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
 
@@ -40,9 +41,19 @@ class ViewController: UIViewController {
     let comb = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4 ,6]]
     
     var gameisActive = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addButtons()
+        
+                // 1 step - we need to have an instance of app delegate
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                
+                // 2 step - we need to create our context
+                let context = appDelegate.persistentContainer.viewContext
+                
+            
+        
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swiped))
                 swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
@@ -55,8 +66,10 @@ class ViewController: UIViewController {
         self.becomeFirstResponder() //for the shake gesture
 
         
+        
         // Do any additional setup after loading the view.
     }
+    
     
     // We are willing to become first responder to get shake motion
     override var canBecomeFirstResponder: Bool {
@@ -75,6 +88,8 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    
     
     func undo_move(){
             if(curPlayer == 1){
@@ -173,7 +188,7 @@ class ViewController: UIViewController {
     var tag = 0
     
     func addButtonTag(tag_name : Int){
-        tag = tag_name     
+        tag = tag_name
         
     }
 
@@ -253,6 +268,11 @@ func reset_game() -> Void{
 func xScore() -> Void{
    xCore += 1
     xScoreLbl.text = "'X' = " + String(xCore)
+    
+    // 3 step - write to coredata
+    let game_model = NSEntityDescription.insertNewObject(forEntityName: "GameModel", into: context)
+    
+    game_model.setValue("Swati", forKey: "firstName")
 }
 func oScore() -> Void{
     oCore += 1
